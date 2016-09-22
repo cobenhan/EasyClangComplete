@@ -106,6 +106,12 @@ class FlagsManager:
             = [path.expanduser(x) for x in self._cmake_prefix_paths]
         log.debug(" expanded CMAKE_PREFIX_PATHs: %s", self._cmake_prefix_paths)
 
+        # overwrite in case of Windows
+        import os
+        if os.name == "nt":
+            FlagsManager.cmake_mask = 'cmake -G "MinGW Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON "{path}"'
+            log.info(" cmake_mask: %s", FlagsManager.cmake_mask)
+
     def any_file_modified(self):
         """
         Any of the checked files was modified since last use.
